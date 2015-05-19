@@ -1,0 +1,31 @@
+{
+  "name": "react-study",
+  "version": "1.0.0",
+  "homepage": "https://github.com/jhsea3do/react-study",
+  "authors": [
+    "shjh <shjh@cn.ibm.com>"
+  ],
+  "description": "React Study",
+  "main": "index.html",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "react",
+    "study"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "eventemitter2": "~0.4.14",
+    "lodash": "3.8",
+    "react": "0.13",
+    "jquery": "1.11"
+  }
+}

@@ -1,0 +1,139 @@
+<html>
+	<head>
+ 		<script rel="react" src="bower_components/react/react-with-addons.min.js"></script>
+ 		<!---
+		<script rel="react-router" src="bower_components/react-router/build/global/ReactRouter.min.js"></script>
+		-->
+		<script rel="jsx" src="bower_components/react/JSXTransformer.js"></script>
+		<script rel="jQuery" src="bower_components/jquery/dist/jquery.min.js"></script>		
+		<script rel="lodash" src="bower_components/lodash/lodash.min.js"></script>
+		<script rel="eventemitter2" src="bower_components/eventemitter2/lib/eventemitter2.js"></script>
+	</head>
+	<body>
+		<div class="d1"> </div>	
+		<div class="d2"> </div>	
+	</body>
+  <script type="text/jsx">
+
+    var texts = [ 'click pls...', 'loading...', 'done!']; 
+
+  	var TagMixin = {
+      listenTag: function() {
+        var me = this; 
+        this.props.em.on('tag-click', function(e) {
+          console.log( $(e.target).parents('div').attr('class') );
+          if(me.state.inputValue == texts[0]) {
+            me.setState({"inputValue": texts[1]});
+            setTimeout(function() {
+              if (me.refs && me.refs['inner'] ) {
+                me.refs['inner'].setState({"textValue": "Inner Div Updated!"})
+              }
+              me.setState({"inputValue": texts[2]});
+            }, 2000);
+          }
+        } );
+      }
+  	};
+
+    var MyMixin = {
+      listenMy: function() {
+        var me = this; 
+        this.props.em.on('tag-click', function(e) {
+          console.log( $(e.target).parents('div').attr('class') );
+          if (me.state.inputValue == texts[2]) {
+            if (me.refs && me.refs['inner'] ) {
+              me.refs['inner'].setState({"textValue": "Inner Div"})
+            }
+            me.setState({"inputValue": texts[0]});
+          }
+        } );
+      }
+    };
+
+    var MyTag = React.createClass({
+
+      mixins: [TagMixin, MyMixin],
+
+      getInitialState: function() {
+        return {
+          "inputValue": texts[0]
+        };
+      },
+
+      componentDidMount: function() {
+        console.log(['in mount ', this.props.name].join(''));
+        this.listenTag();
+      },
+
+      componentDidUpdate: function() {
+        console.log(['in update ', this.props.name].join(''));
+        // this.listenAll();
+        this.listenMy();
+      },
+
+      getDefaultProps: function() {
+        return {
+          "em": null,
+          "name": null,
+          "handlers": {}
+        };
+      },
+
+      render: function() {
+        console.log(['in mount ', this.props.name].join(''));
+        var me = this;
+
+        var inputHandlers = ['tag-click'];
+
+        _.each(inputHandlers, function(key) {
+          me.props.handlers[key] = function(e) {
+            if(e) { e.preventDefault(); }
+            me.props.em.emit(key, e);
+          }
+        });
+
+        return (
+          <div className={this.props.name}>
+            <input name={this.props.name}
+                type="text" value={this.state.inputValue}
+                onClick={this.props.handlers['tag-click']} />
+            { this.props.refs.map(function(ref) {
+                return <ref.ui ref={ref.name} />
+            }) }
+          </div>
+        );
+      }
+    });
+
+    var MyInner = React.createClass({
+
+      getInitialState: function() {
+        return {
+          "textValue": "Inner Div Base"
+        };
+      },
+
+      render: function() {
+
+        return (
+          <div className="inner">{this.state.textValue}</div>
+        );
+      }
+    });
+
+  	// var elem1 = React.createElement(MyTag, {"name": "elem1"});
+    // var elem2 = React.createElement(MyTag, {"name": "elem2"});
+
+  	React.render( 
+      <MyTag name="elem1" 
+        em={new EventEmitter2({"wildcard": true})}
+        refs={[{"name": "inner", "ui": MyInner }]} >
+      </MyTag>, $('.d1')[0] );
+
+  	React.render( <MyTag name="elem2" 
+        em={new EventEmitter2({"wildcard": true})}
+        refs={[]}>
+      </MyTag>, $('.d2')[0] );
+
+  </script>
+</html>
