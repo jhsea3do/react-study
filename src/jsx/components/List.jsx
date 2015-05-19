@@ -5,16 +5,20 @@ define(function(require, exports, module) {
   var List = React.createClass({
     getDefaultProps: function() {
       return {
-        items: [ ]
+        items: [ ],
+        handlers: null
       };
     },
     render: function() {
+      var me = this;
       return (
           <ul>
             { 
               this.props.items.map(function(item){
                 var link = "#" + item.name;
-                return <li key={item.name}><a href={link}>{item.name}</a></li>
+                var handlers = me.props.handlers;
+                var handler = handlers[item.name] || function() {} 
+                return <li key={item.name}><a href={link} onClick={handler.bind(me)}>{item.name}</a></li>
               })
             }
           </ul>

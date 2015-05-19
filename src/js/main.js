@@ -3,6 +3,7 @@ requirejs.config({
   paths: {
     'jquery'        : '../../bower_components/jquery/dist/jquery.min',
     'lodash'        : '../../bower_components/lodash/lodash.min',
+    'eventemitter2' : '../../bower_components/eventemitter2/lib/eventemitter2',
     'react'         : '../../bower_components/react/react-with-addons',
     'JSXTransformer': '../../bower_components/react/JSXTransformer',
     'jsx'           : '../../bower_components/requirejs-react-jsx/jsx',
