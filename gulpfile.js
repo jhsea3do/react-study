@@ -12,7 +12,7 @@ gulp.task('clean', function() {
 gulp.task('serve', function() {
   var server = gls.static('.', 3000);
   server.start();
-  gulp.watch(['public/**/*'], server.notify);
+  gulp.watch(['public/**/*', 'src/**/*'], server.notify);
 });
 
 gulp.task('build', function() {
