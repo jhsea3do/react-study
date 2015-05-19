@@ -40,7 +40,8 @@ define(function(require, exports, module) {
       return (
         <div className={this.props.title}>
           <h2>Main Page</h2>
-          <List handlers={this.props.handlers} items={this.props.items} />
+          <List ref="list1" handlers={this.props.handlers} items={this.props.items} />
+          <List ref="list2" handlers={this.props.handlers} items={this.props.items} />
         </div>
       );
     }
